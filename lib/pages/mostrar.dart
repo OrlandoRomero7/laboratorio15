@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lab15/pages/Estudiantes.dart';
 import 'package:lab15/pages/home_page.dart';
 
 class Mostrar extends StatelessWidget {
-  final SalesData estudiantes;
+  final Estudiante estudiantes;
   const Mostrar({Key? key, required this.estudiantes}) : super(key: key);
 
   @override
@@ -10,7 +11,7 @@ class Mostrar extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 233, 57, 115),
-          title: Text(estudiantes.matricula),
+          title: Text(estudiantes.nombre),
         ),
         body: Container(
           decoration: const BoxDecoration(

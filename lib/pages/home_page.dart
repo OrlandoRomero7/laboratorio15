@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:lab15/pages/Estudiantes.dart';
 import 'package:lab15/pages/mostrar.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -13,57 +13,63 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<SalesData> chartData = [];
+  List<Estudiante> datos = [];
 
   @override
   void initState() {
-    loadSalesData();
+    cargarJson();
     super.initState();
   }
 
-  Future loadSalesData() async {
+  Future cargarJson() async {
     final String jsonString = await obtenerJson();
     final dynamic jsonResponse = json.decode(jsonString);
-    for (Map<String, dynamic> i in jsonResponse)
-      chartData.add(SalesData.fromJson(i));
+    for (Map<String, dynamic> i in jsonResponse) {
+      datos.add(Estudiante.fromJson(i));
+    }
   }
 
   Future<String> obtenerJson() async {
     final respuesta = await http.get(
         Uri.parse('https://prueba-8d6ca-default-rtdb.firebaseio.com/.json'));
     return respuesta.body;
-    /*String url = "https://prueba-8d6ca-default-rtdb.firebaseio.com/.json";
-    http.Response response = await http.get(Uri.parse(url));
-    return response.body;*/
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 233, 57, 115),
           title: const Text('Estudiantes'),
         ),
-        body: Center(
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(
+                  'https://i.pinimg.com/originals/9e/a9/5e/9ea95e67a35d51a1bf5ac9f1c0bf590d.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
           child: FutureBuilder(
               future: obtenerJson(),
               builder: (context, snapShot) {
                 if (snapShot.hasData) {
                   return ListView.builder(
-                      itemCount: chartData.length,
+                      itemCount: datos.length,
                       itemBuilder: (context, index) {
                         return ListTile(
                           title: Text(
-                            chartData[index].matricula,
+                            datos[index].nombre,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text(chartData[index].nombre),
+                          subtitle: Text(datos[index].carrera),
                           trailing: const Icon(Icons.arrow_forward_ios),
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    Mostrar(estudiantes: chartData[index]),
+                                    Mostrar(estudiantes: datos[index]),
                               ),
                             );
                           },
@@ -74,28 +80,5 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               }),
         ));
-  }
-}
-
-class SalesData {
-  String matricula = "";
-  String nombre = "";
-  String carrera = "";
-  String semestre = "";
-  String telefono = "";
-  String correo = "";
-
-  SalesData(this.matricula, this.nombre, this.carrera, this.semestre,
-      this.telefono, this.correo);
-
-  factory SalesData.fromJson(Map<String, dynamic> mapaJson) {
-    return SalesData(
-      mapaJson['matricula'],
-      mapaJson['nombre'],
-      mapaJson['carrera'],
-      mapaJson['semestre'],
-      mapaJson['telefono'],
-      mapaJson['correo'],
-    );
   }
 }
