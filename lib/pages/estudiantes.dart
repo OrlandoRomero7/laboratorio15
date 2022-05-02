@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Estudiante {
   String matricula = "";
   String nombre = "";

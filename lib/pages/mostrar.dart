@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lab15/pages/Estudiantes.dart';
-import 'package:lab15/pages/home_page.dart';
 
 class Mostrar extends StatelessWidget {
   final Estudiante estudiantes;

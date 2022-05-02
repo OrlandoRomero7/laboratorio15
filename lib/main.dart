@@ -1,19 +1,16 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:lab15/pages/home_page.dart';
-import 'package:http/http.dart' as http;
 
 void main() {
-  return runApp(ChartApp());
+  return runApp(const Main());
 }
 
-class ChartApp extends StatelessWidget {
+class Main extends StatelessWidget {
+  const Main({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Chart Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
       home: MyHomePage(),
     );
   }

@@ -15,24 +15,28 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Estudiante> datos = [];
 
-  @override
-  void initState() {
-    cargarJson();
-    super.initState();
+  Future<String> obtenerJson() async {
+    final jsonFirebase = await http.get(
+        Uri.parse('https://rest-api-952ae-default-rtdb.firebaseio.com/.json'));
+    if (jsonFirebase.statusCode == 200) {
+      return jsonFirebase.body;
+    } else {
+      throw Exception('Error al cargar datos');
+    }
   }
 
   Future cargarJson() async {
-    final String jsonString = await obtenerJson();
-    final dynamic jsonResponse = json.decode(jsonString);
-    for (Map<String, dynamic> i in jsonResponse) {
+    final String jsonObtenido = await obtenerJson();
+    final dynamic jsonDecodificado = json.decode(jsonObtenido);
+    for (Map<String, dynamic> i in jsonDecodificado) {
       datos.add(Estudiante.fromJson(i));
     }
   }
 
-  Future<String> obtenerJson() async {
-    final respuesta = await http.get(
-        Uri.parse('https://prueba-8d6ca-default-rtdb.firebaseio.com/.json'));
-    return respuesta.body;
+  @override
+  void initState() {
+    cargarJson();
+    super.initState();
   }
 
   @override
@@ -76,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                       });
                 } else {
-                  return const CircularProgressIndicator();
+                  return const Center(child: CircularProgressIndicator());
                 }
               }),
         ));
